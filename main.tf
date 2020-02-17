@@ -21,7 +21,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "FullAdminAccess_role_policy_attach" {
-  role       = "${aws_iam_role.FullAdminAccess_role.name}"
+  role       = aws_iam_role.FullAdminAccess_role.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
@@ -48,7 +48,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "StandardAdminAccess_role_policy_attach" {
-  role       = "${aws_iam_role.StandardAdminAccess_role.name}"
+  role       = aws_iam_role.StandardAdminAccess_role.name
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
 
@@ -75,7 +75,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "FullReadOnlyAccess_role_policy_attach" {
-  role       = "${aws_iam_role.FullReadOnlyAccess_role.name}"
+  role       = aws_iam_role.FullReadOnlyAccess_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
@@ -102,6 +102,6 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "SecurityAnalyst_role_policy_attach" {
-  role       = "${aws_iam_role.SecurityAnalyst_role.name}"
+  role       = aws_iam_role.SecurityAnalyst_role.name
   policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
 }
