@@ -1,107 +1,73 @@
-resource "aws_iam_role" "FullAdminAccess_role" {
+data "aws_iam_policy_document" "assume" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.master_account}:root"]
+    }
+  }
+}
+
+resource "aws_iam_role" "FullAdminAccess" {
   name                 = "${var.role_prefix}FullAdminAccess"
-  max_session_duration = 7200
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  max_session_duration = var.max_session_duration
   path                 = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "AWS": "arn:aws:iam::${var.master_account}:root"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
 }
 
-resource "aws_iam_role_policy_attachment" "FullAdminAccess_role_policy_attach" {
-  role       = aws_iam_role.FullAdminAccess_role.name
+resource "aws_iam_role_policy_attachment" "FullAdminAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = aws_iam_role.FullAdminAccess.name
 }
 
-resource "aws_iam_role" "StandardAdminAccess_role" {
-  name                 = "${var.role_prefix}StandardAdminAccess"
-  max_session_duration = 7200
+resource "aws_iam_role" "StandardAdminAccess" {
+  count                = var.create_standard_admin_role ? 1 : 0
+  name                 = "${var.role_prefix}${var.standard_admin_role_name}"
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  max_session_duration = var.max_session_duration
   path                 = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "AWS": "arn:aws:iam::${var.master_account}:root"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
 }
 
-resource "aws_iam_role_policy_attachment" "StandardAdminAccess_role_policy_attach" {
-  role       = aws_iam_role.StandardAdminAccess_role.name
+resource "aws_iam_role_policy_attachment" "StandardAdminAccess" {
+  count      = var.create_standard_admin_role && var.standard_admin_attach_poweruser ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+  role       = aws_iam_role.StandardAdminAccess[0].name
 }
 
-resource "aws_iam_role" "FullReadOnlyAccess_role" {
+locals {
+  standard_admin_additional_policies_length = var.create_standard_admin_role ? 0 : length(var.standard_admin_additional_policies)
+}
+
+resource "aws_iam_role_policy_attachment" "StandardAdmin_additional_policies" {
+  count      = local.standard_admin_additional_policies_length
+  policy_arn = var.standard_admin_additional_policies[count.index]
+  role       = aws_iam_role.StandardAdminAccess[0].name
+}
+
+resource "aws_iam_role" "FullReadOnlyAccess" {
   name                 = "${var.role_prefix}FullReadOnlyAccess"
-  max_session_duration = 7200
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  max_session_duration = var.max_session_duration
   path                 = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "AWS": "arn:aws:iam::${var.master_account}:root"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
 }
 
-resource "aws_iam_role_policy_attachment" "FullReadOnlyAccess_role_policy_attach" {
-  role       = aws_iam_role.FullReadOnlyAccess_role.name
+resource "aws_iam_role_policy_attachment" "FullReadOnlyAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  role       = aws_iam_role.FullReadOnlyAccess.name
 }
 
-resource "aws_iam_role" "SecurityAnalyst_role" {
+resource "aws_iam_role" "SecurityAnalyst" {
+  count                = var.create_security_analyst_role ? 1 : 0
   name                 = "${var.role_prefix}SecurityAnalyst"
-  max_session_duration = 7200
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  max_session_duration = var.max_session_duration
   path                 = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "AWS": "arn:aws:iam::${var.master_account}:root"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
 }
 
-resource "aws_iam_role_policy_attachment" "SecurityAnalyst_role_policy_attach" {
-  role       = aws_iam_role.SecurityAnalyst_role.name
+resource "aws_iam_role_policy_attachment" "SecurityAnalyst" {
+  count      = var.create_security_analyst_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
+  role       = aws_iam_role.SecurityAnalyst[0].name
 }
