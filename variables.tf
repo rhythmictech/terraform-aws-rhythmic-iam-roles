@@ -1,9 +1,53 @@
-variable "role_prefix" {
-  default = ""
-  type    = string
-}
+########################################
+# General Vars
+########################################
 
 variable "master_account" {
-  description = "account authenticating from"
+  description = "Master account that holds cross-account roles"
   type        = string
+}
+
+variable "max_session_duration" {
+  default     = 7200
+  description = "STS token max lifetime"
+  type        = number
+}
+
+variable "role_prefix" {
+  default     = ""
+  description = "Optional prefix for IAM role names"
+  type        = string
+}
+
+########################################
+# IAM Role Configuration
+########################################
+variable "create_security_analyst_role" {
+  default     = true
+  description = "Create role with SecurityAudit managed policy attached"
+  type        = bool
+}
+
+variable "create_standard_admin_role" {
+  default     = true
+  description = "Create StandardAdmin role"
+  type        = bool
+}
+
+variable "standard_admin_role_name" {
+  default     = "StandardAdmin"
+  description = "Standard Admin role name"
+  type        = string
+}
+
+variable "standard_admin_attach_poweruser" {
+  default     = true
+  description = "Attach AWS managed policy PowerUser to Standard Admin role"
+  type        = bool
+}
+
+variable "standard_admin_additional_policies" {
+  default     = []
+  description = "List of additional policy ARNs to attach to standard admin role"
+  type        = list(string)
 }
