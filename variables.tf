@@ -19,6 +19,12 @@ variable "role_prefix" {
   type        = string
 }
 
+variable "tags" {
+  default     = {}
+  description = "Tags to apply across all roles"
+  type        = map(string)
+}
+
 ########################################
 # IAM Role Configuration
 ########################################

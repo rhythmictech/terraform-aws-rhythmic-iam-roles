@@ -15,6 +15,10 @@ resource "aws_iam_role" "FullAdminAccess" {
   assume_role_policy   = data.aws_iam_policy_document.assume.json
   max_session_duration = var.max_session_duration
   path                 = "/"
+  tags = merge(
+    var.tags,
+    { Name = "${var.role_prefix}FullAdminAccess" }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "FullAdminAccess" {
@@ -28,6 +32,10 @@ resource "aws_iam_role" "StandardAdminAccess" {
   assume_role_policy   = data.aws_iam_policy_document.assume.json
   max_session_duration = var.max_session_duration
   path                 = "/"
+  tags = merge(
+    var.tags,
+    { Name = "${var.role_prefix}${var.standard_admin_role_name}" }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "StandardAdminAccess" {
@@ -51,6 +59,10 @@ resource "aws_iam_role" "FullReadOnlyAccess" {
   assume_role_policy   = data.aws_iam_policy_document.assume.json
   max_session_duration = var.max_session_duration
   path                 = "/"
+  tags = merge(
+    var.tags,
+    { Name = "${var.role_prefix}FullReadOnlyAccess" }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "FullReadOnlyAccess" {
@@ -64,6 +76,10 @@ resource "aws_iam_role" "SecurityAnalyst" {
   assume_role_policy   = data.aws_iam_policy_document.assume.json
   max_session_duration = var.max_session_duration
   path                 = "/"
+  tags = merge(
+    var.tags,
+    { Name = "${var.role_prefix}SecurityAnalyst" }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "SecurityAnalyst" {
