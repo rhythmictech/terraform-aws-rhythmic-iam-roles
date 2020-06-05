@@ -19,7 +19,7 @@ module "rhythmic-iam-roles" {
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12 |
+| terraform | >= 0.12.19 |
 
 ## Providers
 
