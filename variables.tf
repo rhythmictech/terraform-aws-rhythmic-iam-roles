@@ -2,6 +2,12 @@
 # General Vars
 ########################################
 
+variable "external_id" {
+  default     = ""
+  description = "External ID associated with the IAM role to be assumed, if applicable"
+  type        = string
+}
+
 variable "master_account" {
   description = "Master account that holds cross-account roles"
   type        = string
