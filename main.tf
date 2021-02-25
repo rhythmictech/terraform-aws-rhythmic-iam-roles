@@ -7,6 +7,17 @@ data "aws_iam_policy_document" "assume" {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${var.master_account}:root"]
     }
+
+    dynamic "condition" {
+      for_each = var.external_id != "" ? [1] : []
+      content {
+        test     = "StringEquals"
+        variable = "sts:ExternalId"
+        values = [
+          var.external_id
+        ]
+      }
+    }
   }
 }
 

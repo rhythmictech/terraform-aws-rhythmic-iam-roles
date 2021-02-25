@@ -33,6 +33,7 @@ module "rhythmic-iam-roles" {
 |------|-------------|------|---------|:--------:|
 | create\_security\_analyst\_role | Create role with SecurityAudit managed policy attached | `bool` | `true` | no |
 | create\_standard\_admin\_role | Create StandardAdmin role | `bool` | `true` | no |
+| external\_id | External ID associated with the IAM role to be assumed, if applicable | `string` | `""` | no |
 | master\_account | Master account that holds cross-account roles | `string` | n/a | yes |
 | max\_session\_duration | STS token max lifetime | `number` | `7200` | no |
 | role\_prefix | Optional prefix for IAM role names | `string` | `""` | no |
