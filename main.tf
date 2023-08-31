@@ -56,7 +56,7 @@ resource "aws_iam_role_policy_attachment" "StandardAdminAccess" {
 }
 
 locals {
-  standard_admin_additional_policies_length = var.create_standard_admin_role ? 0 : length(var.standard_admin_additional_policies)
+  standard_admin_additional_policies_length = var.create_standard_admin_role ? length(var.standard_admin_additional_policies) : 0
 }
 
 resource "aws_iam_role_policy_attachment" "StandardAdmin_additional_policies" {
