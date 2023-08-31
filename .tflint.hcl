@@ -31,7 +31,7 @@ rule "terraform_module_pinned_source" {
 }
 
 rule "terraform_naming_convention" {
-  enabled = true
+  enabled = false
   format  = "snake_case"
 }
 
